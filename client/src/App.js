@@ -1,25 +1,24 @@
 import Header from "./components/Header.js";
 import Sauces from "./components/Sauces.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
-  const [sauces, setSauces] = useState([
-    {
-      id: 1,
-      code: "255662",
-      tags: "shibari",
-    },
-    {
-      id: 3,
-      code: "177013",
-      tags: "Sad",
-    },
-    {
-      id: 4,
-      code: "203511",
-      tags: "shibari",
-    },
-  ]);
+  const [sauces, setSauces] = useState([]);
+
+  useEffect(() => {
+    const getSauce = async () => {
+      const dataFromServer = await getData();
+      setSauces(dataFromServer);
+    };
+
+    getSauce();
+  }, []);
+
+  const getData = async () => {
+    const response = await fetch("http://localhost:3000/api/all");
+    const data = await response.json();
+    return data;
+  };
 
   return (
     <div className="App">
@@ -29,7 +28,6 @@ function App() {
             <Header />
           </div>
         </div>
-
         <hr className="divider"></hr>
 
         <div className="row justify-content-center">
