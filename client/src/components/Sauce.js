@@ -6,22 +6,30 @@ const styles = {
     color: "white",
     borderColor: "white",
     margin: "5px",
+    "&:hover": {
+      background: "#fff",
+      color: "black",
+    },
+    minWidth: "100px",
   },
 };
 
 const Sauce = (props) => {
   const { classes } = props;
+  const codeSauce = props.sauce.code;
+
+  console.log(props);
   return (
-    <div>
+    <>
       <Button
         variant="outlined"
-        className={classes.white}
-        href="https://nhentai.net/g/203511"
+        className={classes.white + " btn-sauce"}
+        href={"https://nhentai.net/g/" + codeSauce}
         target="_blank"
       >
-        203511
+        {codeSauce}
       </Button>
-    </div>
+    </>
   );
 };
 
