@@ -3,9 +3,9 @@ import Sauce from "./Sauce";
 const Sauces = () => {
   return (
     <div>
-      <span>
+      <div className="cat">
         <strong>Sauces lol</strong>
-      </span>
+      </div>
       <Sauce />
       <Sauce />
       <Sauce />

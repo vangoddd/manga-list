@@ -24,3 +24,7 @@ hr.divider {
 .container {
   max-width: 720px;
 }
+
+.cat {
+  margin-bottom: 5px;
+}
