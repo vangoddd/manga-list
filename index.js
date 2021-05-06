@@ -43,11 +43,26 @@ function setEndPoint() {
 
   //Returns all the sauce
   app.get("/api/all", (req, res) => {
-    connection.query("SELECT * from sauce", (err, result, fields) => {
+    var query = "SELECT sauce.*, counter.count FROM sauce ";
+    query += "LEFT JOIN ( ";
+    query += "SELECT sauce.tags, count(sauce.tags) as count FROM sauce ";
+    query += "GROUP BY sauce.tags) counter ON counter.tags = sauce.tags ";
+    query += "ORDER BY counter.count DESC;";
+
+    connection.query(query, (err, result, fields) => {
       if (err) throw err;
       res.status(200);
       res.json(result);
     });
+
+    // connection.query(
+    //   "SELECT * from sauce ORDER BY tags",
+    //   (err, result, fields) => {
+    //     if (err) throw err;
+    //     res.status(200);
+    //     res.json(result);
+    //   }
+    // );
   });
 
   app.get("/api/sauce/:tags", (req, res) => {

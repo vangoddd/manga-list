@@ -1,11 +1,15 @@
 const Header = () => {
   return (
-    <header>
-      <h1>
-        <i class="far fa-eye-slash fa-xs"></i> sauce
-      </h1>
-      <span>Developed by vangod</span>
-    </header>
+    <div className="row justify-content-center">
+      <div className="col-6">
+        <header>
+          <h1>
+            <i className="far fa-eye-slash fa-xs"></i> sauce
+          </h1>
+          <span>Developed by vangod</span>
+        </header>
+      </div>
+    </div>
   );
 };
 

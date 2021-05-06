@@ -18,7 +18,6 @@ const Sauce = (props) => {
   const { classes } = props;
   const codeSauce = props.sauce.code;
 
-  console.log(props);
   return (
     <>
       <Button
