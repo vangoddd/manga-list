@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const app = express();
 const mysql = require("mysql");
-const port = 3000;
+const port = process.env.PORT || 3000;
 const cors = require("cors");
 require("dotenv").config();
 
@@ -109,6 +109,10 @@ function setEndPoint() {
         res.send("Successfully inserted");
       }
     );
+  });
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname + "/client/build/index.html"));
   });
 }
 
