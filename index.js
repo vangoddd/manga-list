@@ -7,7 +7,7 @@ require("dotenv").config();
 
 let connection;
 
-function init() {
+function handleDisconnect() {
   connection = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -16,9 +16,27 @@ function init() {
   });
 
   connection.connect((err) => {
-    if (err) throw err;
+    if (err) {
+      console.log("error connecting to DB");
+      setTimeout(handleDisconnect, 2000);
+    }
     console.log("connected to DB");
   });
+
+  connection.on("error", function (err) {
+    console.log("db error", err);
+    if (err.code === "PROTOCOL_CONNECTION_LOST") {
+      // Connection to the MySQL server is usually
+      handleDisconnect(); // lost due to either server restart, or a
+    } else {
+      // connnection idle timeout (the wait_timeout
+      throw err; // server variable configures this)
+    }
+  });
+}
+
+function init() {
+  handleDisconnect();
 
   app.use(cors());
   app.use(express.json()); // for parsing application/json
