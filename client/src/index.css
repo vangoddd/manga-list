@@ -38,3 +38,30 @@ hr.divider {
   justify-content: center;
   align-items: center;
 }
+
+.search-bar {
+  background-color: #333;
+  color: #fff;
+}
+
+.search-bar:focus {
+  background-color: #333;
+  border-color: #fff;
+  box-shadow: 0 0 0 0.25rem rgba(253, 13, 13, 0.075);
+  color: #fff;
+}
+
+.search-bar::placeholder {
+  color: rgb(163, 163, 163);
+  opacity: 1;
+}
+
+.plus {
+  color: #ced4da;
+}
+
+.plus-box {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  height: 38px;
+}

@@ -1,10 +1,14 @@
 import Header from "./components/Header.js";
 import Footer from "./components/Footer.js";
 import Sauces from "./components/Sauces.js";
+import AddSauce from "./components/AddSauce.js";
+import { Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function App() {
   const [sauces, setSauces] = useState([]);
+  const [searchTerm, setSearch] = useState("");
 
   useEffect(() => {
     const getSauce = async () => {
@@ -15,6 +19,31 @@ function App() {
     getSauce();
   }, []);
 
+  // add sauce
+  const handleAddSauce = (sauce) => {
+    const addSauceToServer = async () => {
+      await sendSauce({ code: sauce.code, tags: sauce.lowerCaseTag });
+
+      setSauces([...sauces, { code: sauce.code, tags: sauce.lowerCaseTag }]);
+    };
+
+    addSauceToServer();
+  };
+
+  // send sauce
+  const sendSauce = async (sauce) => {
+    const response = await fetch("/api/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(sauce),
+    });
+    const data = await response.json();
+    return data;
+  };
+
+  // fetch data from server
   const getData = async () => {
     const response = await fetch("/api/all");
     const data = await response.json();
@@ -40,26 +69,76 @@ function App() {
   const groupedSauce = groupBy(sauces, "tags");
 
   return (
-    <div className="App">
-      <div className="container mt-5">
-        <Header />
+    <Router>
+      <div className="App">
+        <div className="container mt-5">
+          <Header />
 
-        {Object.entries(groupedSauce).map(([tags, sauce]) => {
-          return (
-            <>
-              <hr className="divider"></hr>
-              <div className="row justify-content-center" key={tags}>
-                <div className="col-6" key={tags}>
-                  <Sauces sauces={sauce} tags={capitalize(tags)} />
+          <Route
+            path="/"
+            exact
+            render={(props) => (
+              <>
+                <div className="container col-6 mt-3 h-100">
+                  <div className="row align-items-center h-100">
+                    <div className="col-10">
+                      <input
+                        type="tesxt"
+                        className="form-control search-bar"
+                        id="searchBar"
+                        placeholder="Search ..."
+                        onChange={(event) => {
+                          setSearch(event.target.value);
+                        }}
+                      ></input>
+                    </div>
+                    <div className="col-2">
+                      <Link to="/addsauce">
+                        <i className="fa fa-plus fa-lg plus "></i>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </>
-          );
-        })}
 
-        <Footer />
+                {Object.entries(groupedSauce)
+                  .filter((val) => {
+                    if (searchTerm === "") {
+                      return val;
+                    } else if (
+                      val[0].toLowerCase().includes(searchTerm.toLowerCase())
+                    ) {
+                      return val;
+                    }
+                    return null;
+                  })
+                  .map(([tags, sauce]) => {
+                    return (
+                      <div key={tags}>
+                        <hr className="divider" key={capitalize(tags)}></hr>
+                        <div className="row justify-content-center" key={tags}>
+                          <div className="col-6" key={tags}>
+                            <Sauces
+                              sauces={sauce}
+                              tags={capitalize(tags)}
+                              key={sauce}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </>
+            )}
+          />
+          <Route
+            path="/addsauce"
+            component={() => <AddSauce onAdd={handleAddSauce} />}
+          />
+
+          <Footer />
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 

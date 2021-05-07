@@ -39,7 +39,7 @@ function handleDisconnect() {
 function init() {
   handleDisconnect();
 
-  app.use(express.static(path.join(__dirname, "client/build")));
+  //app.use(express.static(path.join(__dirname, "client/build")));
   app.use(cors());
   app.use(express.json()); // for parsing application/json
   app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -100,20 +100,22 @@ function setEndPoint() {
   //insert sauce into db
   //body : sauce: '177013', tags:'Sad'
   app.post("/api/add", (req, res) => {
+    console.log(req.body);
+
     connection.query(
       "INSERT INTO sauce (id, code, tags) VALUES (NULL, ?, ?)",
-      [req.body.sauce, req.body.tags],
+      [req.body.code, req.body.tags],
       (err, result, fields) => {
         if (err) throw err;
         res.status(200);
-        res.send("Successfully inserted");
+        res.json(result);
       }
     );
   });
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname + "/client/build/index.html"));
-  });
+  // app.get("*", (req, res) => {
+  //   res.sendFile(path.join(__dirname + "/client/build/index.html"));
+  // });
 }
 
 init();
