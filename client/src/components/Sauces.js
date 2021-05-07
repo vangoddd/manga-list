@@ -1,22 +1,32 @@
+import * as React from "react";
 import Sauce from "./Sauce";
 import Grid from "@material-ui/core/Grid";
+import { withStyles } from "@material-ui/core";
 
-const Sauces = ({ sauces, tags }) => {
+const styles = (theme) => ({
+  padding: {
+    padding: "5px",
+  },
+});
+
+const Sauces = ({ sauces, tags, classes }) => {
   return (
     <div>
-      <div className="cat">
+      <div>
         <strong>{tags}</strong>
       </div>
 
-      <Grid container>
-        {sauces.map((sauce) => (
-          <Grid item xs={4} key={sauce.id}>
-            <Sauce sauce={sauce} />
-          </Grid>
-        ))}
-      </Grid>
+      <div>
+        <Grid container>
+          {sauces.map((sauce) => (
+            <Grid item xs={6} sm={4} key={sauce.id} className={classes.padding}>
+              <Sauce sauce={sauce} />
+            </Grid>
+          ))}
+        </Grid>
+      </div>
     </div>
   );
 };
 
-export default Sauces;
+export default withStyles(styles)(Sauces);

@@ -5,12 +5,10 @@ const styles = {
   white: {
     color: "white",
     borderColor: "white",
-    margin: "5px",
     "&:hover": {
       background: "#fff",
       color: "black",
     },
-    minWidth: "100px",
   },
 };
 
@@ -25,6 +23,7 @@ const Sauce = (props) => {
         className={classes.white + " btn-sauce"}
         href={"https://nhentai.net/g/" + codeSauce}
         target="_blank"
+        fullWidth
       >
         {codeSauce}
       </Button>
