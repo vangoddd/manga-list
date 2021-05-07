@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 const mysql = require("mysql");
 const port = 3000;
@@ -38,6 +39,7 @@ function handleDisconnect() {
 function init() {
   handleDisconnect();
 
+  app.use(express.static(path.join(__dirname, "client/build")));
   app.use(cors());
   app.use(express.json()); // for parsing application/json
   app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
