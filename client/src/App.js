@@ -16,7 +16,7 @@ function App() {
   }, []);
 
   const getData = async () => {
-    const response = await fetch("http://localhost:3000/api/all");
+    const response = await fetch("/api/all");
     const data = await response.json();
     return data;
   };
