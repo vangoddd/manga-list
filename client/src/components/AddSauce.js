@@ -6,11 +6,22 @@ const AddSauce = ({ onAdd }) => {
   const [code, setCode] = useState("");
   const [tag, setTag] = useState("");
 
+  const checkSauce = (sauceInput) => {
+    if (
+      sauceInput.match(/^[0-9]+$/) &&
+      sauceInput.length > 4 &&
+      sauceInput.length < 7
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (!code || !tag) {
-      alert("Please enter code and tag");
+    if (!code || !tag || !checkSauce(code)) {
+      alert("Please enter valid code and tag");
       return;
     }
 

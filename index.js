@@ -91,8 +91,6 @@ function setEndPoint() {
   //insert sauce into db
   //body : sauce: '177013', tags:'Sad'
   app.post("/api/add", (req, res) => {
-    console.log(req.body);
-
     connection.query(
       "INSERT INTO sauce (id, code, tags) VALUES (NULL, ?, ?)",
       [req.body.code, req.body.tags],
@@ -102,6 +100,61 @@ function setEndPoint() {
         res.json(result);
       }
     );
+  });
+
+  //get random sauce
+  // api/random?amt=5
+  app.get("/api/random", (req, res) => {
+    let amt = parseInt(req.query.amt) || 1;
+    let query = [
+      "SELECT sauce.*, (SELECT count(*) from sauce) as total FROM sauce",
+      "ORDER BY RAND()",
+      "LIMIT ?",
+    ].join(" ");
+
+    connection.query(query, [amt], (err, result, fields) => {
+      if (err) throw err;
+      res.status(200);
+      res.json(result);
+    });
+  });
+
+  //get random sauce with tag
+  // api/random/shibari?amt=5
+  app.get("/api/random/:tags", (req, res) => {
+    let tag = req.params.tags;
+    let amt = parseInt(req.query.amt) || 1;
+    let query = [
+      "SELECT sauce.*, counter.count FROM sauce",
+      "LEFT JOIN (",
+      "SELECT sauce.tags, count(sauce.tags) as count FROM sauce",
+      "GROUP BY sauce.tags)",
+      "counter ON counter.tags = sauce.tags",
+      "WHERE sauce.tags = ?",
+      "ORDER BY RAND()",
+      "LIMIT ?",
+    ].join(" ");
+
+    connection.query(query, [tag, amt], (err, result, fields) => {
+      if (err) throw err;
+      res.status(200);
+      res.json(result);
+    });
+  });
+
+  //get tag list
+  app.get("/api/taglist/", (req, res) => {
+    let query = [
+      "SELECT tags, count(tags) as count FROM sauce",
+      "GROUP BY tags",
+      "ORDER BY count DESC",
+    ].join(" ");
+
+    connection.query(query, (err, result, fields) => {
+      if (err) throw err;
+      res.status(200);
+      res.json(result);
+    });
   });
 
   app.get("*", (req, res) => {
