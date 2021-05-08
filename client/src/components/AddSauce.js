@@ -11,6 +11,7 @@ const AddSauce = ({ onAdd }) => {
 
     if (!code || !tag) {
       alert("Please enter code and tag");
+      return;
     }
 
     const lowerCaseTag = tag.toLowerCase();
@@ -33,7 +34,8 @@ const AddSauce = ({ onAdd }) => {
             <div className="mb-3">
               <label className="form-label">Code</label>
               <input
-                className="form-control"
+                className="form-control form-bar"
+                placeholder="177013"
                 value={code}
                 onChange={(e) => {
                   setCode(e.target.value);
@@ -44,7 +46,8 @@ const AddSauce = ({ onAdd }) => {
             <div className="mb-3">
               <label className="form-label">Tag</label>
               <input
-                className="form-control"
+                className="form-control form-bar"
+                placeholder="Sad"
                 value={tag}
                 onChange={(e) => {
                   setTag(e.target.value);
@@ -55,12 +58,26 @@ const AddSauce = ({ onAdd }) => {
             <div className="mb-3">
               <span>Please dont spam, only submit the best one</span>
             </div>
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-            <Link to="/">
-              <button className="btn btn-danger">Back</button>
-            </Link>
+            <div className="row">
+              <div className="col-12 col-sm-6">
+                <button
+                  type="submit"
+                  className="btn w-100 btn-outline-primary white"
+                >
+                  Submit
+                </button>
+              </div>
+              <div className="col-12 col-sm-6 my-sm-0 my-2">
+                <Link to="/">
+                  <button
+                    type="button"
+                    className="btn w-100 btn-block btn-outline-danger white"
+                  >
+                    Back
+                  </button>
+                </Link>
+              </div>
+            </div>
           </form>
         </div>
       </div>

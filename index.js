@@ -39,7 +39,7 @@ function handleDisconnect() {
 function init() {
   handleDisconnect();
 
-  //app.use(express.static(path.join(__dirname, "client/build")));
+  app.use(express.static(path.join(__dirname, "client/build")));
   app.use(cors());
   app.use(express.json()); // for parsing application/json
   app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -74,15 +74,6 @@ function setEndPoint() {
       res.status(200);
       res.json(result);
     });
-
-    // connection.query(
-    //   "SELECT * from sauce ORDER BY tags",
-    //   (err, result, fields) => {
-    //     if (err) throw err;
-    //     res.status(200);
-    //     res.json(result);
-    //   }
-    // );
   });
 
   app.get("/api/sauce/:tags", (req, res) => {
@@ -113,9 +104,9 @@ function setEndPoint() {
     );
   });
 
-  // app.get("*", (req, res) => {
-  //   res.sendFile(path.join(__dirname + "/client/build/index.html"));
-  // });
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname + "/client/build/index.html"));
+  });
 }
 
 init();
