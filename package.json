@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "postgre": "node postgre.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "both": "(nodemon index) & (cd client && npm start)",
     "server": "nodemon index",
