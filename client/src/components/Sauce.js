@@ -25,9 +25,9 @@ const Sauce = (props) => {
       <Link to={routeAddress}>
         <Button
           variant='outlined'
-          className={classes.white + " btn-sauce"}
-          target='_blank'
+          className={classes.white}
           fullWidth
+          style={{ textTransform: "none" }}
         >
           {mangaName}
         </Button>
