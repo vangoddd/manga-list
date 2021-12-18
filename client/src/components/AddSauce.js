@@ -3,26 +3,26 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const AddSauce = ({ onAdd }) => {
-  const [code, setCode] = useState("");
+  const [name, setName] = useState("");
   const [genre, setGenre] = useState("");
   const [link, setLink] = useState("");
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (!code || !genre || !link) {
+    if (!name || !genre || !link) {
       alert("Please enter valid manga, link, and genre");
       return;
     }
 
-    const lowerCaseTag = genre.toLowerCase();
+    const lowerCaseGenre = genre.toLowerCase();
     console.log(genre);
 
-    onAdd({ code, lowerCaseTag });
+    onAdd({ name, lowerCaseGenre, link });
 
-    alert("Code submitted, thanks for your contribution <3");
+    alert("Manga submitted, thanks for your contribution <3");
 
-    setCode("");
+    setName("");
     setGenre("");
   };
 
@@ -37,9 +37,9 @@ const AddSauce = ({ onAdd }) => {
               <input
                 className='form-control form-bar'
                 placeholder='Kuzu no honkai'
-                value={code}
+                value={name}
                 onChange={(e) => {
-                  setCode(e.target.value);
+                  setName(e.target.value);
                 }}
               />
               <div className='form-text'>Manga name</div>

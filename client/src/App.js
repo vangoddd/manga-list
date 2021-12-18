@@ -23,9 +23,21 @@ function App() {
   // add sauce
   const handleAddSauce = (sauce) => {
     const addSauceToServer = async () => {
-      await sendSauce({ code: sauce.code, tags: sauce.lowerCaseTag });
-
-      setSauces([...sauces, { code: sauce.code, tags: sauce.lowerCaseTag }]);
+      await sendSauce({
+        name: sauce.name,
+        genre: sauce.lowerCaseGenre,
+        link: sauce.link,
+      }).then((res) => {
+        setSauces([
+          ...sauces,
+          {
+            id: res.insertId,
+            name: sauce.name,
+            genre: sauce.lowerCaseGenre,
+            link: sauce.link,
+          },
+        ]);
+      });
     };
 
     addSauceToServer();
@@ -87,7 +99,7 @@ function App() {
                         type='tesxt'
                         className='form-control search-bar'
                         id='searchBar'
-                        placeholder='Search ...'
+                        placeholder='Search genre ...'
                         onChange={(event) => {
                           setSearch(event.target.value);
                         }}

@@ -91,12 +91,13 @@ function setEndPoint() {
   //insert sauce into db
   app.post("/api/add", (req, res) => {
     connection.query(
-      "INSERT INTO sauce (id, code, tags) VALUES (NULL, ?, ?)",
-      [req.body.code, req.body.tags],
+      "INSERT INTO manga (id, name, genre, link) VALUES (NULL, ?, ?, ?)",
+      [req.body.name, req.body.genre, req.body.link],
       (err, result, fields) => {
         if (err) throw err;
         res.status(200);
         res.json(result);
+        // console.log(result);
       }
     );
   });
