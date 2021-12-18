@@ -63,10 +63,10 @@ function setEndPoint() {
 
   //Returns all the sauce
   app.get("/api/all", (req, res) => {
-    var query = "SELECT sauce.*, counter.count FROM sauce ";
+    var query = "SELECT manga.*, counter.count FROM manga ";
     query += "LEFT JOIN ( ";
-    query += "SELECT sauce.tags, count(sauce.tags) as count FROM sauce ";
-    query += "GROUP BY sauce.tags) counter ON counter.tags = sauce.tags ";
+    query += "SELECT manga.genre, count(manga.genre) as count FROM manga ";
+    query += "GROUP BY manga.genre) counter ON counter.genre = manga.genre ";
     query += "ORDER BY counter.count DESC;";
 
     connection.query(query, (err, result, fields) => {
@@ -76,10 +76,10 @@ function setEndPoint() {
     });
   });
 
-  app.get("/api/sauce/:tags", (req, res) => {
+  app.get("/api/sauce/:genre", (req, res) => {
     connection.query(
-      "SELECT * from sauce WHERE tags = ?",
-      [req.params.tags],
+      "SELECT * from manga WHERE genre = ?",
+      [req.params.genre],
       (err, result, fields) => {
         if (err) throw err;
         res.status(200);
@@ -89,7 +89,6 @@ function setEndPoint() {
   });
 
   //insert sauce into db
-  //body : sauce: '177013', tags:'Sad'
   app.post("/api/add", (req, res) => {
     connection.query(
       "INSERT INTO sauce (id, code, tags) VALUES (NULL, ?, ?)",
@@ -107,7 +106,7 @@ function setEndPoint() {
   app.get("/api/random", (req, res) => {
     let amt = parseInt(req.query.amt) || 1;
     let query = [
-      "SELECT sauce.*, (SELECT count(*) from sauce) as total FROM sauce",
+      "SELECT manga.*, (SELECT count(*) from manga) as total FROM manga",
       "ORDER BY RAND()",
       "LIMIT ?",
     ].join(" ");
@@ -121,21 +120,21 @@ function setEndPoint() {
 
   //get random sauce with tag
   // api/random/shibari?amt=5
-  app.get("/api/random/:tags", (req, res) => {
-    let tag = req.params.tags;
+  app.get("/api/random/:genre", (req, res) => {
+    let gen = req.params.genre;
     let amt = parseInt(req.query.amt) || 1;
     let query = [
-      "SELECT sauce.*, counter.count FROM sauce",
+      "SELECT manga.*, counter.count FROM manga",
       "LEFT JOIN (",
-      "SELECT sauce.tags, count(sauce.tags) as count FROM sauce",
-      "GROUP BY sauce.tags)",
-      "counter ON counter.tags = sauce.tags",
-      "WHERE sauce.tags = ?",
+      "SELECT manga.genre, count(manga.genre) as count FROM manga",
+      "GROUP BY manga.genre)",
+      "counter ON counter.genre = manga.genre",
+      "WHERE manga.genre = ?",
       "ORDER BY RAND()",
       "LIMIT ?",
     ].join(" ");
 
-    connection.query(query, [tag, amt], (err, result, fields) => {
+    connection.query(query, [gen, amt], (err, result, fields) => {
       if (err) throw err;
       res.status(200);
       res.json(result);
@@ -143,10 +142,10 @@ function setEndPoint() {
   });
 
   //get tag list
-  app.get("/api/taglist/", (req, res) => {
+  app.get("/api/genrelist/", (req, res) => {
     let query = [
-      "SELECT tags, count(tags) as count FROM sauce",
-      "GROUP BY tags",
+      "SELECT genre, count(genre) as count FROM manga",
+      "GROUP BY genre",
       "ORDER BY count DESC",
     ].join(" ");
 

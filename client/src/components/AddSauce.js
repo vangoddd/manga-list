@@ -4,85 +4,87 @@ import { useState } from "react";
 
 const AddSauce = ({ onAdd }) => {
   const [code, setCode] = useState("");
-  const [tag, setTag] = useState("");
-
-  const checkSauce = (sauceInput) => {
-    if (
-      sauceInput.match(/^[0-9]+$/) &&
-      sauceInput.length > 4 &&
-      sauceInput.length < 7
-    ) {
-      return true;
-    }
-    return false;
-  };
+  const [genre, setGenre] = useState("");
+  const [link, setLink] = useState("");
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (!code || !tag || !checkSauce(code)) {
-      alert("Please enter valid code and tag");
+    if (!code || !genre || !link) {
+      alert("Please enter valid manga, link, and genre");
       return;
     }
 
-    const lowerCaseTag = tag.toLowerCase();
-    console.log(tag);
+    const lowerCaseTag = genre.toLowerCase();
+    console.log(genre);
 
     onAdd({ code, lowerCaseTag });
 
     alert("Code submitted, thanks for your contribution <3");
 
     setCode("");
-    setTag("");
+    setGenre("");
   };
 
   return (
     <>
-      <hr className="divider"></hr>
-      <div className="row justify-content-center">
-        <div className="col-6">
+      <hr className='divider'></hr>
+      <div className='row justify-content-center'>
+        <div className='col-6'>
           <form onSubmit={onSubmit}>
-            <div className="mb-3">
-              <label className="form-label">Code</label>
+            <div className='mb-3'>
+              <label className='form-label'>Name</label>
               <input
-                className="form-control form-bar"
-                placeholder="177013"
+                className='form-control form-bar'
+                placeholder='Kuzu no honkai'
                 value={code}
                 onChange={(e) => {
                   setCode(e.target.value);
                 }}
               />
-              <div className="form-text">6-digit nhentai code</div>
+              <div className='form-text'>Manga name</div>
             </div>
-            <div className="mb-3">
-              <label className="form-label">Tag</label>
+            <div className='mb-3'>
+              <label className='form-label'>Genre</label>
               <input
-                className="form-control form-bar"
-                placeholder="Sad"
-                value={tag}
+                className='form-control form-bar'
+                placeholder='Drama'
+                value={genre}
                 onChange={(e) => {
-                  setTag(e.target.value);
+                  setGenre(e.target.value);
                 }}
               />
-              <div className="form-text">Primary tag of the sauce</div>
+              <div className='form-text'>
+                Primary genre of the manga (send only one)
+              </div>
             </div>
-            <div className="mb-3">
-              <span>Please dont spam, only submit the best one</span>
+            <div className='mb-3'>
+              <label className='form-label'>Link</label>
+              <input
+                className='form-control form-bar'
+                placeholder='https://myanimelist.net/manga/70261/Mushoku_Tensei__Isekai_Ittara_Honki_Dasu'
+                value={link}
+                onChange={(e) => {
+                  setLink(e.target.value);
+                }}
+              />
+              <div className='form-text'>Myanimelist link to the manga</div>
             </div>
-            <div className="row">
-              <div className="col-12 col-sm-6">
+
+            <div className='row'>
+              <div className='col-12 col-sm-6'>
                 <button
-                  type="submit"
-                  className="btn w-100 btn-outline-primary white"
+                  type='submit'
+                  className='btn w-100 btn-outline-primary white'
                 >
                   Submit
                 </button>
               </div>
-              <div className="col-12 col-sm-6 my-sm-0 my-2">
-                <Link to="/">
+              <div className='col-12 col-sm-6 my-sm-0 my-2'>
+                <Link to='/'>
                   <button
-                    type="button"
-                    className="btn w-100 btn-block btn-outline-danger white"
+                    type='button'
+                    className='btn w-100 btn-block btn-outline-danger white'
                   >
                     Back
                   </button>

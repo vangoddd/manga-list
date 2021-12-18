@@ -9,11 +9,11 @@ const styles = (theme) => ({
   },
 });
 
-const Sauces = ({ sauces, tags, classes }) => {
+const Sauces = ({ sauces, genre, classes }) => {
   return (
     <div>
       <div>
-        <strong>{tags}</strong>
+        <strong>{genre}</strong>
       </div>
 
       <div>
