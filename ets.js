@@ -168,6 +168,17 @@ function setEndPoint() {
     });
   });
 
+  app.get("/api/delete/:id", (req, res) => {
+    let query = ["DELETE FROM manga", "WHERE id = ?"].join(" ");
+    let idParams = req.params.id;
+
+    connection.query(query, [idParams], (err, result, fields) => {
+      if (err) throw err;
+      res.status(200);
+      res.json(result);
+    });
+  });
+
   app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname + "/client/build/index.html"));
   });

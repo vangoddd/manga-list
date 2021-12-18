@@ -2,6 +2,8 @@ import * as React from "react";
 import { withStyles } from "@material-ui/core";
 import { useEffect, useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 const SauceDetail = (props) => {
   const mangaId = props.match.params.id;
 
@@ -19,6 +21,13 @@ const SauceDetail = (props) => {
   const getDetailFromServer = async (mangaId) => {
     const response = await fetch("/api/detail/" + mangaId);
     const data = await response.json();
+    return data;
+  };
+
+  const deleteSauce = async (mangaId) => {
+    const response = await fetch("/api/delete/" + mangaId);
+    const data = await response.json();
+    window.location.href = "/";
     return data;
   };
 
@@ -50,6 +59,9 @@ const SauceDetail = (props) => {
           <div className='row justify-content-center pt-4'>
             <div className='col-12 col-sm-6'>
               <button
+                onClick={() => {
+                  deleteSauce(mangaId);
+                }}
                 type='submit'
                 className='btn w-100 btn-outline-danger white'
               >
