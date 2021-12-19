@@ -11,3 +11,6 @@ Redis sentinel untuk Caching detail manga.
 
 ## File konfigurasi
 File konfigurasi berada di [folder konfigurasi](config)
+
+## Dataset dan DDL MySQL
+https://github.com/vangoddd/sauce-ddl/blob/master/manga.sql
