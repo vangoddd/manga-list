@@ -4,11 +4,14 @@ const app = express();
 const mysql = require("mysql");
 const port = process.env.PORT || 3000;
 const cors = require("cors");
+const Redis = require("ioredis");
 require("dotenv").config();
 
 let connection;
+let redis;
 
 function handleDisconnect() {
+  console.log(process.env.DB_HOST_MYSQL);
   connection = mysql.createConnection({
     host: process.env.DB_HOST_MYSQL,
     user: process.env.DB_USER_MYSQL,
@@ -19,6 +22,7 @@ function handleDisconnect() {
   connection.connect((err) => {
     if (err) {
       console.log("error connecting to DB");
+      console.log(err);
       setTimeout(handleDisconnect, 2000);
     }
     console.log("connected to DB");
@@ -36,7 +40,18 @@ function handleDisconnect() {
   });
 }
 
+function redisConn() {
+  redis = new Redis(6379, "34.231.70.68");
+
+  redis.set("foo", "bar");
+
+  redis.get("foo").then(function (result) {
+    console.log(result); // Prints "bar"
+  });
+}
+
 function init() {
+  redisConn();
   handleDisconnect();
 
   app.use(express.static(path.join(__dirname, "client/build")));
@@ -158,13 +173,30 @@ function setEndPoint() {
   });
 
   app.get("/api/detail/:id", (req, res) => {
-    let query = ["SELECT * FROM manga", "WHERE id = ?"].join(" ");
     let idParams = req.params.id;
 
-    connection.query(query, [idParams], (err, result, fields) => {
-      if (err) throw err;
-      res.status(200);
-      res.json(result);
+    //Getting from cache
+    redis.get(idParams, function (err, redisResult) {
+      if (err) {
+        throw err;
+      }
+      if (redisResult) {
+        console.log("getting from cache");
+        console.log(redisResult);
+        res.status(200);
+        res.send(redisResult);
+      } else {
+        console.log("getting from server");
+        let query = ["SELECT * FROM manga", "WHERE id = ?"].join(" ");
+
+        connection.query(query, [idParams], (err, result, fields) => {
+          if (err) throw err;
+          console.log(result);
+          redis.set(idParams, JSON.stringify(result), "ex", 600);
+          res.status(200);
+          res.json(result);
+        });
+      }
     });
   });
 

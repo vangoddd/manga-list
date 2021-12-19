@@ -1,0 +1,16 @@
+/etc/redis/redis.conf
+#bind 127.0.0.1 ::1
+protected-mode no
+slaveof 10.0.0.137 6379
+
+/etc/redis/sentinel.conf
+sentinel myid 9862e14b6d9fb11c035c4a28d48573455a7876a2
+sentinel monitor redis-primary 10.0.0.137 6379 2
+sentinel down-after-milliseconds redis-primary 2000
+sentinel failover-timeout redis-primary 5000
+protected-mode no
+
+sudo chown redis:redis /etc/redis/sentinel.conf
+sudo chown redis:redis /var/log/redis/sentinel.log
+sudo chmod 640 /etc/redis/sentinel.conf
+sudo chmod 660 /var/log/redis/sentinel.log

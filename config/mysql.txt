@@ -1,0 +1,46 @@
+password: admin123
+
+master:
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+
+bind-address	            = 0.0.0.0
+server-id               	= 1
+log_bin                 	= /var/log/mysql/mysql-bin.log
+
+CREATE USER 'replica'@'10.0.0.115' IDENTIFIED BY 'Replica123!';
+GRANT REPLICATION SLAVE ON *.* TO 'replica'@'10.0.0.115';
+
+slave:
+sudo rm -f /var/lib/mysql/auto.cnf
+
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+bind-address	            = 0.0.0.0
+server-id               	= 2
+log_bin                 	= /var/log/mysql/mysql-bin.log
+
+STOP SLAVE;
+
+CHANGE MASTER TO MASTER_HOST='10.0.0.149', MASTER_USER='replica', MASTER_PASSWORD='Replica123!', MASTER_LOG_FILE='mysql-bin.000002', MASTER_LOG_POS=619;
+
+START SLAVE;
+
+
+Data:
+wget https://github.com/vangoddd/sauce-ddl/raw/master/manga.sql
+mysql> source /home/ubuntu/manga.sql
+
+master user:
+CREATE USER 'vachri'@'localhost' IDENTIFIED BY 'admin';
+CREATE USER 'vachri'@'%' IDENTIFIED BY 'admin';
+
+GRANT ALL ON *.* TO 'vachri'@'localhost';
+GRANT ALL ON *.* TO 'vachri'@'%';
+FLUSH PRIVILEGES;
+
+connection .env
+DB_HOST_MYSQL=3.235.194.101
+DB_USER_MYSQL=vachri
+DB_PASSWORD_MYSQL=admin
+DB_NAME_MYSQL=manga
+
+GRANT ALL PRIVILEGES ON *.* TO 'vachri'@'180.248.12.218' IDENTIFIED BY 'admin' WITH GRANT OPTION;
